@@ -114,59 +114,30 @@
             white-space: pre-line;
         }
 
-        /* --- GALERIA I LISTY --- */
-        .works-list {
-            list-style: none;
-            width: 100%;
-            max-width: 400px;
+        /* --- STYLIZACJA LINKU DO GALERII --- */
+        .gallery-link-container {
+            margin-top: 30px;
         }
 
-        .works-list li {
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            margin-bottom: 10px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
-        }
-
-        .works-list li:hover { background: rgba(255,255,255,0.2); transform: translateX(5px); }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .gallery-grid img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-            border-radius: 15px;
-            transition: 0.3s;
-        }
-
-        /* POWIĘKSZONY ORYGINALNY PRZYCISK POWRÓT */
-        .back-btn { 
-            background: rgba(255, 255, 255, 0.1); 
-            border: 1px solid white; 
-            color: white; 
-            padding: 12px 30px; /* Powiększony padding dla łatwiejszego klikania */
-            border-radius: 30px; 
-            cursor: pointer; 
-            margin-bottom: 20px; 
-            font-size: 1rem;
-            font-weight: 600;
-            transition: 0.3s;
+        .btn-gallery {
             display: inline-block;
+            text-decoration: none;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: 0.4s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        
-        .back-btn:active {
+
+        .btn-gallery:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: scale(0.95);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            border-color: #fff;
         }
 
         /* --- KONTAKT --- */
@@ -187,7 +158,6 @@
             nav { padding: 8px 10px; gap: 5px; }
             nav a { font-size: 0.8rem; padding: 8px 10px; }
             section { padding: 40px 20px; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -210,20 +180,12 @@
         </section>
 
         <section id="prace">
-            <div id="category-menu">
-                <h2>Moje Prace</h2>
-                <ul class="works-list">
-                    <li onclick="showGallery('3d')">Projekty 3D</li>
-                    <li onclick="showGallery('okladki')">Okładki</li>
-                    <li onclick="showGallery('plakaty')">Plakaty</li>
-                    <li onclick="showGallery('szaty')">Szaty Graficzne Albumów</li>
-                </ul>
-            </div>
-
-            <div id="gallery-display" style="display: none;">
-                <button class="back-btn" onclick="hideGallery()">← Powrót</button>
-                <h2 id="gallery-title">Tytuł</h2>
-                <div class="gallery-grid" id="images-container"></div>
+            <h2>Moje Prace</h2>
+            <div class="gallery-link-container">
+                <p style="margin-bottom: 20px; opacity: 0.8;">Zapraszam do obejrzenia moich projektów w galerii zewnętrznej:</p>
+                <a href="https://drive.google.com/drive/folders/12gUJlRn0mn0sdx546fa3zmODOV7X30GV?usp=share_link" target="_blank" class="btn-gallery">
+                    Otwórz Galerię Prac
+                </a>
             </div>
         </section>
 
@@ -243,13 +205,6 @@
     </div>
 
     <script>
-        const galleryData = {
-            '3d': { folder: 'img/3d/', title: 'Projekty 3D', images: ['render1.jpg', 'render2.png'] },
-            'okladki': { folder: 'img/okladki/', title: 'Okładki', images: ['cover1.jpg', 'cover2.jpg'] },
-            'plakaty': { folder: 'img/plakaty/', title: 'Plakaty', images: ['poster1.jpg'] },
-            'szaty': { folder: 'img/szaty/', title: 'Szaty Graficzne Albumów', images: ['layout1.jpg', 'layout2.jpg'] }
-        };
-
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('nav a');
         const container = document.getElementById('scroll-container');
@@ -269,31 +224,6 @@
         }, { root: container, threshold: 0.6 });
 
         sections.forEach(section => observer.observe(section));
-
-        function showGallery(category) {
-            const data = galleryData[category];
-            document.getElementById('category-menu').style.display = 'none';
-            const display = document.getElementById('gallery-display');
-            const containerImg = document.getElementById('images-container');
-            
-            display.style.display = 'block';
-            document.getElementById('gallery-title').innerText = data.title;
-            containerImg.innerHTML = ''; 
-
-            data.images.forEach(imgName => {
-                const imgElement = document.createElement('img');
-                imgElement.src = data.folder + imgName;
-                imgElement.alt = data.title;
-                containerImg.appendChild(imgElement);
-            });
-            // Autoscroll do góry po wejściu w galerię
-            document.getElementById('prace').scrollIntoView();
-        }
-
-        function hideGallery() {
-            document.getElementById('category-menu').style.display = 'block';
-            document.getElementById('gallery-display').style.display = 'none';
-        }
 
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
